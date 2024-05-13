@@ -9,4 +9,13 @@ import org.springframework.stereotype.Service;
 public interface ProductService {
     //public Product createProduct(Product product);
     public ProductResponseDto getSingleProduct(int productId);
+
+    public ProductResponseDto addProduct( String title,
+                                          String description,
+                                          String imageUrl,
+                                          String category,
+                                          double price );
+
 }
+
+
