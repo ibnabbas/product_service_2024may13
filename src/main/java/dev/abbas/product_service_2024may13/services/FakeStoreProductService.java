@@ -18,7 +18,7 @@ public class FakeStoreProductService implements ProductService {
     public ProductResponseDto getSingleProduct(int productId) {
 
         FakeStoreDto fakeStoreDto = restTemplate.getForObject(
-                "https://fakestoreapi.com/products" + productId,
+                "https://fakestoreapi.com/products/" + productId,
                 FakeStoreDto.class
         );
 
@@ -41,7 +41,7 @@ public class FakeStoreProductService implements ProductService {
         fakeStoreDto.setPrice(price);
 
         FakeStoreDto response = restTemplate.postForObject(
-                "https://fakestoreapi.com/products",
+                "https://fakestoreapi.com/products/",
                 fakeStoreDto,
                 FakeStoreDto.class
         );
