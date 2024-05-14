@@ -7,5 +7,5 @@ public class Category {
 
     @Setter
     @Getter
-    private String title;
+    private String titleOfCategory;
 }

@@ -41,7 +41,7 @@ public class ProductController {
     }
 
     private ProductResponseDto convertToProductResponseDto(Product product) {
-        String categoryTitle = product.getCategory().getTitle();
+        String categoryTitle = product.getCategory().getTitleOfCategory();
         ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
         productResponseDto.setCategory(categoryTitle);
         return productResponseDto;
