@@ -25,9 +25,9 @@ public class ProductController {
         return "Hello World!!";
     }
     @GetMapping("/products/{id}")
-    public Product getProductDetails(@PathVariable("id") int productId ) {
-        return productService.getSingleProduct(productId);
-        //return null;
+    public ProductResponseDto getProductDetails(@PathVariable("id") int productId ) {
+        Product product = productService.getSingleProduct(productId);
+        return convertToProductResponseDto(product);
     }
     @PostMapping("/products")
     public Product createNewProduct(@RequestBody ProductResponseDto productRequestDto ) {
@@ -38,6 +38,13 @@ public class ProductController {
               productRequestDto.getCategory(),
               productRequestDto.getPrice()
         );
+    }
+
+    private ProductResponseDto convertToProductResponseDto(Product product) {
+        String categoryTitle = product.getCategory().getTitle();
+        ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
+        productResponseDto.setCategory(categoryTitle);
+        return productResponseDto;
     }
 
 }
