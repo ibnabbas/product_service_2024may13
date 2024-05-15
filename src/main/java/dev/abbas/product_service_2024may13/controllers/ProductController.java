@@ -7,6 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.Banner;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class ProductController {
 
@@ -29,15 +32,27 @@ public class ProductController {
         Product product = productService.getSingleProduct(productId);
         return convertToProductResponseDto(product);
     }
+
+    @GetMapping("/products")
+    public List<ProductResponseDto> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>();
+        for (Product product : products) {
+            productResponseDtos.add(convertToProductResponseDto(product));
+        }
+        return productResponseDtos;
+    }
+
     @PostMapping("/products")
-    public Product createNewProduct(@RequestBody ProductResponseDto productRequestDto ) {
-        return productService.addProduct(
+    public ProductResponseDto createNewProduct(@RequestBody ProductResponseDto productRequestDto ) {
+        Product product = productService.addProduct(
               productRequestDto.getTitle(),
               productRequestDto.getDescription(),
               productRequestDto.getImage(),
               productRequestDto.getCategory(),
               productRequestDto.getPrice()
         );
+        return convertToProductResponseDto(product);
     }
 
     private ProductResponseDto convertToProductResponseDto(Product product) {
