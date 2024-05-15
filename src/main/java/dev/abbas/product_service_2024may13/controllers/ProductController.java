@@ -1,10 +1,14 @@
 package dev.abbas.product_service_2024may13.controllers;
 
+import dev.abbas.product_service_2024may13.dto.ErrorDto;
 import dev.abbas.product_service_2024may13.dto.ProductResponseDto;
+import dev.abbas.product_service_2024may13.exceptions.ProductNotFoundException;
 import dev.abbas.product_service_2024may13.models.Product;
 import dev.abbas.product_service_2024may13.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.Banner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,9 +32,17 @@ public class ProductController {
         return "Hello World!!";
     }
     @GetMapping("/products/{id}")
-    public ProductResponseDto getProductDetails(@PathVariable("id") int productId ) {
+    public ProductResponseDto getProductDetails(@PathVariable("id") int productId ) throws ProductNotFoundException {
         Product product = productService.getSingleProduct(productId);
         return convertToProductResponseDto(product);
+    }
+
+    //Add exception handler
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleProdcutNptFoundException(ProductNotFoundException productNotFoundException) {
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setMessage(productNotFoundException.getMessage());
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/products")

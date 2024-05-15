@@ -2,6 +2,7 @@ package dev.abbas.product_service_2024may13.services;
 
 import dev.abbas.product_service_2024may13.dto.FakeStoreDto;
 import dev.abbas.product_service_2024may13.dto.ProductResponseDto;
+import dev.abbas.product_service_2024may13.exceptions.ProductNotFoundException;
 import dev.abbas.product_service_2024may13.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,12 +19,18 @@ public class FakeStoreProductService implements ProductService {
         this.restTemplate = restTemplate;
     }
     @Override
-    public Product getSingleProduct(int productId) {
+    public Product getSingleProduct(int productId) throws ProductNotFoundException {
 
         FakeStoreDto fakeStoreDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreDto.class
         );
+
+        if (fakeStoreDto == null) {
+            throw new ProductNotFoundException(
+                    "Product with productId " + productId + " not found. Why not try within range 1 to 20"
+            );
+        }
 
         return fakeStoreDto.toProduct();
     }
